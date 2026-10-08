@@ -1,0 +1,4 @@
+# Separate environment: PySceneDetect 0.6.x and newer HF CLI pin different Click versions.
+pysubs2==1.9.0
+rapidfuzz==3.14.6
+mlx-whisper==0.4.3; sys_platform == 'darwin' and platform_machine == 'arm64'

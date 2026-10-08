@@ -23,6 +23,7 @@ Premiere Pro용 Mac 패널과 영화 소개 영상 자동화 실험을 모은 �
 - 번역 패널: `work/gpt-translator/README.md`와 `docs/CEP_COMPATIBILITY.md` 참고. API 키는 사용자가 로컬에서 설정합니다.
 - 링크 패널: `work/link-import/README_KO.md` 참고. 실행 바이너리는 저장소에서 제외했습니다. Apple Silicon Mac에서 `bash work/link-import/Setup_Engines.command`로 버전과 해시를 고정한 엔진을 준비합니다.
 - 쇼츠 모듈: `outputs/ShortsPackagingPlugin/README_KO.md` 참고. Python 의존성과 FFmpeg/ffprobe가 필요합니다.
+- 추가 자동화: [실행 안내](outputs/ShortsPackagingPlugin/AUTOMATION_KO.md). OpenTimelineIO 기반 나레이션 길이 조립, MLX Whisper 한국어 자막, pysubs2 자막 검사, RapidFuzz 대사 검색을 지원합니다. 편집과 ASR은 각각 별도 가상환경을 사용합니다.
 - Qwen/OmniVoice: Apple Silicon용 Python 3.12 가상환경을 `work/qwen-tts-venv`에 만들고 `mlx-audio==0.5.8`, `scipy`를 설치합니다. 위 엔진 준비 후 저장소 루트에서 해당 폴더의 `generate*.py`를 실행합니다. 첫 실행 시 Hugging Face 모델을 다운로드하며 이후 로컬에서 생성합니다.
 - macOS 나레이션 조립 실험은 별도로 준비한 `outputs/Movie_Fixed_Master.mov` 등 로컬 입력 파일을 전제로 합니다. 영화 파일은 이 저장소에 포함하지 않습니다.
 
@@ -44,7 +45,7 @@ API 키, `.env` 파일, 개인 인증정보, 가상환경, 캐시, 다운로드 
 ```sh
 (cd work/gpt-translator && node --test tests/*.test.js)
 node --test work/link-import/tests/engine.test.cjs
-# Python 의존성과 ffmpeg/ffprobe가 PATH에 준비된 환경:
+# requirements-automation.txt와 ffmpeg/ffprobe가 준비된 환경:
 python -m unittest discover -s outputs/ShortsPackagingPlugin/tests -v
 ```
 

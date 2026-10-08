@@ -1,0 +1,132 @@
+{
+  "checks": [
+    {
+      "segment": "early",
+      "clip": "${WORKSPACE}/outputs/Movie_Audit/early/shorts-lfhc9nyk/scene-0001.mp4",
+      "source_start": 600.6,
+      "frames": 176,
+      "audio_video_duration_difference": -0.0006669999999999732,
+      "audio_lag_ms": -0.375,
+      "correlation": 0.9940946448463716,
+      "video_mse_minus1_zero_plus1": [
+        53.08875868055556,
+        0.11686197916666667,
+        51.299479166666664
+      ]
+    },
+    {
+      "segment": "early",
+      "clip": "${WORKSPACE}/outputs/Movie_Audit/early/shorts-lfhc9nyk/scene-0002.mp4",
+      "source_start": 607.9406666666667,
+      "frames": 285,
+      "audio_video_duration_difference": 0.00012500000000059686,
+      "audio_lag_ms": 0.125,
+      "correlation": 0.9900766146671109,
+      "video_mse_minus1_zero_plus1": [
+        0.7611762152777778,
+        0.13682725694444445,
+        0.5451388888888888
+      ]
+    },
+    {
+      "segment": "middle",
+      "clip": "${WORKSPACE}/outputs/Movie_Audit/middle/shorts-er0n_c1y/scene-0001.mp4",
+      "source_start": 3603.6,
+      "frames": 480,
+      "audio_video_duration_difference": 0.0,
+      "audio_lag_ms": -0.125,
+      "correlation": 0.9895895387090372,
+      "video_mse_minus1_zero_plus1": [
+        398.9567057291667,
+        0.2136501736111111,
+        344.32313368055554
+      ]
+    },
+    {
+      "segment": "late",
+      "clip": "${WORKSPACE}/outputs/Movie_Audit/late/shorts-ondpgusg/scene-0001.mp4",
+      "source_start": 6606.6,
+      "frames": 101,
+      "audio_video_duration_difference": -0.0005420000000002645,
+      "audio_lag_ms": -0.125,
+      "correlation": 0.9650032110770213,
+      "video_mse_minus1_zero_plus1": [
+        462.91449652777777,
+        0.1736111111111111,
+        470.056640625
+      ]
+    },
+    {
+      "segment": "late",
+      "clip": "${WORKSPACE}/outputs/Movie_Audit/late/shorts-ondpgusg/scene-0002.mp4",
+      "source_start": 6610.812541666667,
+      "frames": 93,
+      "audio_video_duration_difference": 0.00012500000000015277,
+      "audio_lag_ms": 0.125,
+      "correlation": 0.9985764231233396,
+      "video_mse_minus1_zero_plus1": [
+        357.0730251736111,
+        0.09657118055555555,
+        356.21625434027777
+      ]
+    },
+    {
+      "segment": "late",
+      "clip": "${WORKSPACE}/outputs/Movie_Audit/late/shorts-ondpgusg/scene-0003.mp4",
+      "source_start": 6614.6914166666675,
+      "frames": 107,
+      "audio_video_duration_difference": 0.00020799999999976393,
+      "audio_lag_ms": -0.75,
+      "correlation": 0.9972952905684707,
+      "video_mse_minus1_zero_plus1": [
+        331.54383680555554,
+        0.13671875,
+        210.60709635416666
+      ]
+    },
+    {
+      "segment": "late",
+      "clip": "${WORKSPACE}/outputs/Movie_Audit/late/shorts-ondpgusg/scene-0004.mp4",
+      "source_start": 6619.6547083333335,
+      "frames": 41,
+      "audio_video_duration_difference": -4.2000000000097515e-05,
+      "audio_lag_ms": 0.125,
+      "correlation": 0.9986263144461278,
+      "video_mse_minus1_zero_plus1": [
+        17.173177083333332,
+        0.1450737847222222,
+        25.15700954861111
+      ]
+    },
+    {
+      "segment": "late",
+      "clip": "${WORKSPACE}/outputs/Movie_Audit/late/shorts-ondpgusg/scene-0005.mp4",
+      "source_start": 6621.364750000001,
+      "frames": 100,
+      "audio_video_duration_difference": 0.00016700000000025028,
+      "audio_lag_ms": -0.125,
+      "correlation": 0.9454581661978902,
+      "video_mse_minus1_zero_plus1": [
+        182.984375,
+        0.19010416666666666,
+        0.21875
+      ]
+    },
+    {
+      "segment": "late",
+      "clip": "${WORKSPACE}/outputs/Movie_Audit/late/shorts-ondpgusg/scene-0006.mp4",
+      "source_start": 6625.619000000001,
+      "frames": 24,
+      "audio_video_duration_difference": 0.0,
+      "audio_lag_ms": -0.125,
+      "correlation": 0.9410109128635763,
+      "video_mse_minus1_zero_plus1": [
+        1487.709201388889,
+        0.11273871527777778,
+        0.12825520833333334
+      ]
+    }
+  ],
+  "total_frames": 1407,
+  "xml": "${WORKSPACE}/outputs/Movie_Audit/Movie_Audit_Assembly.xml"
+}

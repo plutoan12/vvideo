@@ -1,0 +1,24 @@
+[
+  {
+    "file": "OmniVoice_Male.wav",
+    "model": "mlx-community/OmniVoice-bf16",
+    "instruct": "male, adult, low pitch",
+    "text": "같은 이야기인데, 감독이 바뀌면 얼마나 달라질까요? 더 킬러스는 그걸 비교해 보는 영화예요.",
+    "synthetic": true,
+    "reference_audio": null,
+    "steps": 64,
+    "duration": 9.52,
+    "elapsed": 5.69335216699983
+  },
+  {
+    "file": "OmniVoice_Female.wav",
+    "model": "mlx-community/OmniVoice-bf16",
+    "instruct": "female, adult, moderate pitch",
+    "text": "같은 이야기인데, 감독이 바뀌면 얼마나 달라질까요? 더 킬러스는 그걸 비교해 보는 영화예요.",
+    "synthetic": true,
+    "reference_audio": null,
+    "steps": 64,
+    "duration": 9.52,
+    "elapsed": 4.757868166000208
+  }
+]

@@ -1,0 +1,19 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
+const {validateUrl,quality,downloadArgs}=require('../LinkImport/lib/engine');
+test('Supported video links and share redirects',()=>{for(const u of ['https://youtu.be/GgeOkQ3ikgo','https://www.youtube.com/watch?v=GgeOkQ3ikgo&list=RDMMGgeOkQ3ikgo','https://www.instagram.com/reel/abc_123/','https://www.tiktok.com/@author/video/1234567','https://vm.tiktok.com/Zabcdef/'])assert.match(validateUrl(u),/^https:/);});
+test('Reject non-video URLs, credentials, forged domains and shell inputs',()=>{for(const u of ['file:///etc/passwd','https://youtube.com.evil.test/watch?v=GgeOkQ3ikgo','https://evil.test','https://www.youtube.com/playlist?list=xx','https://www.instagram.com/author/','https://user:pass@youtu.be/GgeOkQ3ikgo','https://youtu.be/GgeOkQ3ikgo\n;touch /tmp/bad','--exec touch'])assert.throws(()=>validateUrl(u));});
+test('Quality is bounded and URL always a positional argument',()=>{assert.throws(()=>quality('1080;touch'));const a=downloadArgs('https://youtu.be/GgeOkQ3ikgo','1080','/tmp/job','/tmp/bin');assert.equal(a[a.length-2],'--');assert(a.includes('--ignore-config'));assert(a.includes('--no-plugin-dirs'));assert(a.includes('--no-playlist'));assert(a.includes('--no-overwrites'));});
+function host(options={}){
+ const item={nodeId:'media',type:1,getMediaPath:()=>'/video.mp4'};const children=[item];children.numItems=1;const bin={name:'Link Import',type:2,children};const root=[bin];root.numItems=1;
+ function track(){const clips=[];clips.numItems=0;return {clips,isLocked:()=>!!options.locked};}
+ const vt=[track()],at=[track()];vt.numTracks=at.numTracks=1;
+ const seq={sequenceID:'seq',videoTracks:vt,audioTracks:at,getPlayerPosition:()=>({seconds:12}),insertClip:(it,time)=>{if(options.insertFails)return;vt[0].clips.push({projectItem:it,end:{seconds:time.seconds+5}});vt[0].clips.numItems++;if(!options.noAudio){at[0].clips.push({projectItem:it,end:{seconds:time.seconds+5}});at[0].clips.numItems++;}}};
+ const project={path:'/project.prproj',activeSequence:seq,rootItem:{children:root},importFiles:()=>true};
+ const context={app:{project},File:function(p){this.fsName=p;this.exists=true;},Time:function(){this.seconds=0;},encodeURIComponent,decodeURIComponent,Math,Date,Error};vm.createContext(context);vm.runInContext(fs.readFileSync(require.resolve('../LinkImport/host.jsx'),'utf8'),context);return {api:context.LinkImport,seq,project};
+}
+test('Host rejects changed project before importing',()=>{const h=host();assert.match(h.api.importVideo('/video.mp4','append','/other','seq',true),/^ERR/);});
+test('Host rejects changed active sequence and locked tracks',()=>{assert.match(host().api.importVideo('/video.mp4','append','/project.prproj','other',true),/^ERR/);assert.match(host({locked:true}).api.importVideo('/video.mp4','append','/project.prproj','seq',true),/^ERR/);});
+test('Host verifies both video and audio instead of trusting call return',()=>{assert.match(host({insertFails:true}).api.importVideo('/video.mp4','append','/project.prproj','seq',true),/^ERR/);assert.match(host({noAudio:true}).api.importVideo('/video.mp4','append','/project.prproj','seq',true),/^ERR/);assert.match(host().api.importVideo('/video.mp4','append','/project.prproj','seq',true),/^OK/);});
+test('Append follows latest end across video and audio, not playhead',()=>{const h=host();h.seq.audioTracks[0].clips.push({projectItem:{nodeId:'other'},end:{seconds:40}});h.seq.audioTracks[0].clips.numItems=1;assert.match(h.api.importVideo('/video.mp4','append','/project.prproj','seq',true),/^OK/);assert.equal(h.seq.videoTracks[0].clips[0].end.seconds,45);});
+test('Bin-only does not alter timeline',()=>{const h=host();assert.match(h.api.importVideo('/video.mp4','bin','/project.prproj','seq',true),/^OK/);assert.equal(h.seq.videoTracks[0].clips.numItems,0);});

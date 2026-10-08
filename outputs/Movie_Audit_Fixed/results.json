@@ -1,0 +1,119 @@
+[
+  {
+    "source": "${WORKSPACE}/work/shorts-module/movie-audit/early.mkv",
+    "status": "completed",
+    "output_dir": "${WORKSPACE}/outputs/Movie_Audit_Fixed/early/shorts-ei8e597_",
+    "clips": [
+      "${WORKSPACE}/outputs/Movie_Audit_Fixed/early/shorts-ei8e597_/scene-0001.mov",
+      "${WORKSPACE}/outputs/Movie_Audit_Fixed/early/shorts-ei8e597_/scene-0002.mov"
+    ],
+    "skipped": 1,
+    "error": "",
+    "xml_path": "${WORKSPACE}/outputs/Movie_Audit_Fixed/early/shorts-ei8e597_/early_assembly.xml",
+    "settings": {
+      "fps": "24000/1001",
+      "media_format": "mov",
+      "layout": "fit_blur",
+      "trim_bars": true
+    },
+    "scene_crops": [
+      {
+        "start": 0.0,
+        "end": 7.3406666666666665,
+        "top": 136,
+        "bottom": 136
+      },
+      {
+        "start": 7.3406666666666665,
+        "end": 19.227541666666664,
+        "top": 136,
+        "bottom": 136
+      }
+    ]
+  },
+  {
+    "source": "${WORKSPACE}/work/shorts-module/movie-audit/middle.mkv",
+    "status": "completed",
+    "output_dir": "${WORKSPACE}/outputs/Movie_Audit_Fixed/middle/shorts-8ztr5gcy",
+    "clips": [
+      "${WORKSPACE}/outputs/Movie_Audit_Fixed/middle/shorts-8ztr5gcy/scene-0001.mov"
+    ],
+    "skipped": 0,
+    "error": "",
+    "xml_path": "${WORKSPACE}/outputs/Movie_Audit_Fixed/middle/shorts-8ztr5gcy/middle_assembly.xml",
+    "settings": {
+      "fps": "24000/1001",
+      "media_format": "mov",
+      "layout": "fit_blur",
+      "trim_bars": true
+    },
+    "scene_crops": [
+      {
+        "start": 0.0,
+        "end": 20.02,
+        "top": 16,
+        "bottom": 16
+      }
+    ]
+  },
+  {
+    "source": "${WORKSPACE}/work/shorts-module/movie-audit/late.mkv",
+    "status": "completed",
+    "output_dir": "${WORKSPACE}/outputs/Movie_Audit_Fixed/late/shorts-yzv9k93f",
+    "clips": [
+      "${WORKSPACE}/outputs/Movie_Audit_Fixed/late/shorts-yzv9k93f/scene-0001.mov",
+      "${WORKSPACE}/outputs/Movie_Audit_Fixed/late/shorts-yzv9k93f/scene-0002.mov",
+      "${WORKSPACE}/outputs/Movie_Audit_Fixed/late/shorts-yzv9k93f/scene-0003.mov",
+      "${WORKSPACE}/outputs/Movie_Audit_Fixed/late/shorts-yzv9k93f/scene-0004.mov",
+      "${WORKSPACE}/outputs/Movie_Audit_Fixed/late/shorts-yzv9k93f/scene-0005.mov",
+      "${WORKSPACE}/outputs/Movie_Audit_Fixed/late/shorts-yzv9k93f/scene-0006.mov"
+    ],
+    "skipped": 2,
+    "error": "",
+    "xml_path": "${WORKSPACE}/outputs/Movie_Audit_Fixed/late/shorts-yzv9k93f/late_assembly.xml",
+    "settings": {
+      "fps": "24000/1001",
+      "media_format": "mov",
+      "layout": "fit_blur",
+      "trim_bars": true
+    },
+    "scene_crops": [
+      {
+        "start": 0.0,
+        "end": 4.212541666666667,
+        "top": 16,
+        "bottom": 16
+      },
+      {
+        "start": 4.212541666666667,
+        "end": 8.091416666666666,
+        "top": 16,
+        "bottom": 16
+      },
+      {
+        "start": 8.091416666666666,
+        "end": 12.554208333333332,
+        "top": 16,
+        "bottom": 16
+      },
+      {
+        "start": 13.054708333333332,
+        "end": 14.76475,
+        "top": 16,
+        "bottom": 16
+      },
+      {
+        "start": 14.76475,
+        "end": 18.935583333333334,
+        "top": 16,
+        "bottom": 16
+      },
+      {
+        "start": 19.019,
+        "end": 20.02,
+        "top": 16,
+        "bottom": 16
+      }
+    ]
+  }
+]

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>GPT Translator</title>
+  <link rel="stylesheet" href="css/panel.css">
+</head>
+<body>
+  <main>
+    <header>
+      <div class="eyebrow">PREMIERE PRO · SRT</div>
+      <h1>GPT Translator <span class="version">1.0</span></h1>
+      <p class="subtitle">원본 타임코드를 지키는 자막 번역</p>
+      <div id="runtime" class="runtime">Premiere 연결 확인 중…</div>
+    </header>
+
+    <section aria-labelledby="file-heading">
+      <h2 id="file-heading"><span class="step">01</span> 원본 자막</h2>
+      <div class="button-row">
+        <button type="button" id="open-file" disabled>SRT 열기</button>
+        <button type="button" id="open-sample" class="secondary" disabled>샘플 열기</button>
+      </div>
+      <p id="source-name" class="filename">번역할 .srt 파일을 선택해 줘.</p>
+      <p id="source-meta" class="muted">번호와 타임코드는 원본 그대로 보관돼.</p>
+    </section>
+
+    <section aria-labelledby="settings-heading">
+      <h2 id="settings-heading"><span class="step">02</span> 번역 설정</h2>
+      <fieldset id="settings" disabled>
+        <div class="two-columns">
+          <div>
+            <label for="source-language">원본 언어</label>
+            <select id="source-language">
+              <option value="auto">자동 감지</option>
+              <option value="Korean">한국어</option>
+              <option value="English">영어</option>
+              <option value="Japanese">일본어</option>
+              <option value="Spanish">스페인어</option>
+              <option value="Indonesian">인도네시아어</option>
+              <option value="Thai">태국어</option>
+              <option value="Portuguese">포르투갈어</option>
+              <option value="Vietnamese">베트남어</option>
+              <option value="Hindi">힌디어</option>
+            </select>
+          </div>
+          <div>
+            <label for="target-language">번역 언어</label>
+            <select id="target-language">
+              <option value="English" data-code="en">영어</option>
+              <option value="Japanese" data-code="ja">일본어</option>
+              <option value="Spanish" data-code="es">스페인어</option>
+              <option value="Korean" data-code="ko">한국어</option>
+              <option value="Indonesian" data-code="id">인도네시아어</option>
+              <option value="Thai" data-code="th">태국어</option>
+              <option value="Portuguese" data-code="pt">포르투갈어</option>
+              <option value="Vietnamese" data-code="vi">베트남어</option>
+              <option value="Hindi" data-code="hi">힌디어</option>
+            </select>
+          </div>
+        </div>
+        <label for="api-key">OpenAI API 키</label>
+        <div class="key-row">
+          <input id="api-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-…" aria-describedby="key-note">
+          <button type="button" id="clear-key" class="secondary">지우기</button>
+        </div>
+        <p id="key-note" class="muted">키는 파일에 저장하지 않아. 패널을 다시 열면 재입력해야 해.</p>
+        <label for="model">API 모델</label>
+        <input id="model" type="text" value="gpt-4.1-mini" maxlength="128" autocomplete="off" spellcheck="false" aria-describedby="model-note">
+        <p id="model-note" class="muted">다른 모델은 Responses API의 구조화된 JSON 출력을 지원해야 해.</p>
+        <label for="tone">말투 · 고유명사 지침 <span class="optional">선택</span></label>
+        <textarea id="tone" rows="3" maxlength="1500" placeholder="예: 자연스러운 구어체. NOWZ는 영문 그대로 유지."></textarea>
+      </fieldset>
+    </section>
+
+    <section aria-labelledby="translate-heading">
+      <h2 id="translate-heading"><span class="step">03</span> 번역하고 저장</h2>
+      <p class="notice">버튼을 누르면 자막 텍스트와 번역 지침이 OpenAI로 전송돼. API 사용료는 ChatGPT 구독과 별도야.</p>
+      <div class="button-row">
+        <button type="button" id="translate" class="primary" disabled>API로 번역</button>
+        <button type="button" id="cancel" class="secondary" disabled>취소</button>
+      </div>
+      <progress id="progress" value="0" max="1" aria-label="번역 진행률"></progress>
+      <p id="status" role="status" aria-live="polite">SRT 파일을 열어 줘.</p>
+      <p id="error" class="error" role="alert" hidden></p>
+      <button type="button" id="save" class="save" disabled>번역 SRT를 새 파일로 저장</button>
+      <p id="result-meta" class="muted">최대 50개씩 처리하고, 개수·ID·번호·타임코드를 검사해.</p>
+      <p id="saved-path" class="filename" hidden></p>
+    </section>
+
+    <section id="preview-section" aria-labelledby="preview-heading" hidden>
+      <h2 id="preview-heading">자막 미리보기 <span class="optional">처음 5개</span></h2>
+      <div id="preview"></div>
+    </section>
+    <footer>저장한 SRT는 Premiere에서 가져와 자막 트랙에 배치해 줘. 자동 타임라인 수정은 하지 않아.</footer>
+  </main>
+  <script src="js/app.js"></script>
+</body>
+</html>

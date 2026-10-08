@@ -1,0 +1,10 @@
+{
+  "name": "gpt-translator-mac-cep",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SRT translator with immutable original timing and exclusive output publication",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
+  "engines": { "node": ">=18" }
+}

@@ -1,0 +1,40 @@
+GPT Translator 1.0.0 — Mac용 Premiere SRT 번역 패널
+
+1. ZIP 전체의 압축을 풀어 줘.
+2. Premiere Pro를 완전히 종료해 줘.
+3. Install_Mac.command를 실행해 줘.
+   GPT_Translator 폴더를 설치하고 CEP 11·12의 PlayerDebugMode를 설정해.
+   처음 실행이 막히면 오른쪽 클릭 → 열기를 시도하고,
+   계속 차단되면 docs/CEP_COMPATIBILITY.md의 macOS 안내를 확인해 줘.
+4. Premiere를 다시 열고 창 → 확장 프로그램 → GPT Translator를 선택해 줘.
+5. SRT 열기 → 번역 언어 선택 → 본인 OpenAI API 키 입력 → API로 번역.
+6. 검사가 끝나면 '번역 SRT를 새 파일로 저장'을 눌러 줘.
+7. 저장한 SRT를 Premiere로 가져와 자막 트랙에 배치해 줘.
+
+처음에는 패널의 '샘플 열기'로 5개 자막만 확인해도 돼.
+샘플도 'API로 번역'을 누르면 실제 API를 호출하므로 사용료가 발생해.
+
+필요 조건
+- Mac의 Premiere Pro 23.0 이상, CEP 11 또는 12 사용 환경을 대상으로 설계했어.
+- 자동 번역에는 본인 OpenAI API 키와 인터넷 연결이 필요해.
+- API 사용료는 ChatGPT 구독과 별도야.
+- 별도 Node.js, Python, npm, VS Code, Copilot 설치는 필요하지 않아.
+
+보존하는 것
+- 원본 자막 번호·타임코드·자막 구분선·원본 문자 인코딩/BOM.
+- 원본 파일과 기존 결과 파일. 같은 이름으로는 저장할 수 없어.
+- 이미 검사를 통과한 이전 번역은 재시도 실패·취소 뒤에도 보관해.
+
+알아둘 범위
+- SRT 텍스트를 번역하는 패널이야. 영상 싱크나 타임라인 자체를 수정하지 않아.
+- 원래부터 어긋난 싱크나 번역 문장의 의미 오류를 자동으로 고치지는 않아.
+- API 키는 파일·브라우저 저장소에 보관하지 않고 패널 실행 중에만 사용해.
+- 설치기는 해당 사용자 CEP 11·12의 서명되지 않은 확장 실행 설정을 켜.
+  같은 런타임의 다른 미서명 확장에도 적용되는 공통 설정이야.
+- 실제 Mac/Premiere 설치와 유료 OpenAI API 호출은 제작 환경에서 실행하지 못했어.
+  코드·실제 로컬 파일 저장·모의 API/패널 검증 결과는 docs/VERIFICATION.md에 있어.
+
+자세한 사용법: README.md
+설치 문제와 제거/복원: docs/CEP_COMPATIBILITY.md
+설치 해제: Premiere를 종료한 뒤 Uninstall_Mac.command 실행
+

@@ -1,0 +1,169 @@
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+const TextDecoder = require('util').TextDecoder;
+const srt = require('./srt');
+const MAX_SOURCE_BYTES = 10 * 1024 * 1024;
+
+function fail(code, message) {
+  const error = new Error(message);
+  error.code = code;
+  return error;
+}
+
+function hash(bytes) {
+  return crypto.createHash('sha256').update(bytes).digest('hex');
+}
+
+function encode(text, encoding) {
+  if (encoding === 'utf-16le') return Buffer.from(text, 'utf16le');
+  if (encoding === 'utf-16be') return Buffer.from(text, 'utf16le').swap16();
+  if (encoding === 'utf-8') return Buffer.from(text, 'utf8');
+  throw fail('ENCODING', '지원하지 않는 문자 인코딩이야. UTF-8 SRT로 다시 저장해 줘.');
+}
+
+function decode(bytes) {
+  if (!Buffer.isBuffer(bytes)) throw fail('INPUT', '자막 파일의 바이트를 읽지 못했어.');
+  let encoding = 'utf-8';
+  if (bytes.length >= 2 && bytes[0] === 0xff && bytes[1] === 0xfe) encoding = 'utf-16le';
+  if (bytes.length >= 2 && bytes[0] === 0xfe && bytes[1] === 0xff) encoding = 'utf-16be';
+  let source;
+  try {
+    source = new TextDecoder(encoding, { fatal: true, ignoreBOM: true }).decode(bytes);
+  } catch (_) {
+    throw fail('ENCODING', '문자 인코딩을 안전하게 읽을 수 없어. 원본을 UTF-8 SRT로 다시 저장해 줘.');
+  }
+  if (source.indexOf('\u0000') !== -1 || !encode(source, encoding).equals(bytes)) {
+    throw fail('ENCODING', '문자를 손실 없이 읽지 못했어. UTF-8 또는 BOM이 있는 UTF-16 SRT를 선택해 줘.');
+  }
+  return { source: source, encoding: encoding };
+}
+
+async function readBytes(filePath) {
+  let handle;
+  try {
+    handle = await fs.promises.open(filePath, 'r');
+    const info = await handle.stat();
+    if (!info.isFile()) throw fail('NOT_FILE', '일반 SRT 파일을 선택해 줘.');
+    if (info.size > MAX_SOURCE_BYTES) throw fail('FILE_TOO_LARGE', 'SRT 파일은 최대 10 MiB까지 열 수 있어.');
+    const bytes = await handle.readFile();
+    if (bytes.length > MAX_SOURCE_BYTES) throw fail('FILE_TOO_LARGE', 'SRT 파일은 최대 10 MiB까지 열 수 있어.');
+    return bytes;
+  } finally {
+    if (handle) await handle.close();
+  }
+}
+
+async function readSource(filePath) {
+  if (typeof filePath !== 'string' || !filePath || path.extname(filePath).toLowerCase() !== '.srt') {
+    throw fail('FILE_TYPE', '.srt 확장자의 자막 파일을 선택해 줘.');
+  }
+  const realPath = await fs.promises.realpath(filePath);
+  const bytes = await readBytes(realPath);
+  const decoded = decode(bytes);
+  const document = srt.parseSrt(decoded.source);
+  // Compute all batches up front so an oversized cue is rejected before any API call.
+  const batches = srt.makeBatches(document.cues);
+  return Object.freeze({
+    path: realPath,
+    filename: path.basename(realPath),
+    document: document,
+    encoding: decoded.encoding,
+    sha256: hash(bytes),
+    size: bytes.length,
+    batchCount: batches.length
+  });
+}
+
+function verifyOutput(snapshot, output) {
+  const parsed = srt.parseSrt(output);
+  const original = snapshot.document;
+  if (parsed.cues.length !== original.cues.length) {
+    throw fail('OUTPUT_STRUCTURE', '저장 전 검사에서 자막 개수가 달라졌어. 저장을 중단했어.');
+  }
+  const items = parsed.cues.map(function (cue, i) {
+    if (cue.indexLine !== original.cues[i].indexLine || cue.timingLine !== original.cues[i].timingLine) {
+      throw fail('OUTPUT_STRUCTURE', '저장 전 검사에서 원본 번호나 타임코드가 달라졌어. 저장을 중단했어.');
+    }
+    return { id: original.cues[i].id, text: cue.text };
+  });
+  if (srt.renderSrt(original, items) !== output) {
+    throw fail('OUTPUT_STRUCTURE', '자막 텍스트 바깥의 형식이 달라졌어. 저장을 중단했어.');
+  }
+  const bytes = encode(output, snapshot.encoding);
+  if (decode(bytes).source !== output) {
+    throw fail('ENCODING', '번역문을 손실 없이 저장할 수 없어. 저장을 중단했어.');
+  }
+  return bytes;
+}
+
+async function assertSourceUnchanged(snapshot) {
+  const current = await readBytes(snapshot.path);
+  if (hash(current) !== snapshot.sha256) {
+    throw fail('SOURCE_CHANGED', '번역 도중 원본 파일이 바뀌었어. 바뀐 원본을 다시 열어 번역해 줘.');
+  }
+}
+
+async function writeTranslatedCopy(snapshot, outputPath, output) {
+  if (typeof outputPath !== 'string' || !outputPath || path.extname(outputPath).toLowerCase() !== '.srt') {
+    throw fail('FILE_TYPE', '저장할 파일 이름 끝에 .srt를 붙여 줘.');
+  }
+  const bytes = verifyOutput(snapshot, output);
+  await assertSourceUnchanged(snapshot);
+  const selected = path.resolve(outputPath);
+  const parent = await fs.promises.realpath(path.dirname(selected));
+  const destination = path.join(parent, path.basename(selected));
+  const temporary = path.join(parent, '.gpt-translator-' + crypto.randomBytes(12).toString('hex') + '.tmp');
+  let handle;
+  let published = false;
+  let cleanupWarning = false;
+  try {
+    try {
+      await fs.promises.lstat(destination);
+      throw fail('OUTPUT_EXISTS', '같은 이름의 파일이 이미 있어. 다른 파일 이름으로 저장해 줘.');
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
+    handle = await fs.promises.open(temporary, 'wx', 0o600);
+    await handle.writeFile(bytes);
+    await handle.sync();
+    await handle.close();
+    handle = null;
+    // This file was just generated by us; the source-file size cap must not
+    // reject a valid translation that is longer than the original subtitle.
+    if (!(await fs.promises.readFile(temporary)).equals(bytes)) {
+      throw fail('WRITE_VERIFY', '임시 파일의 내용이 달라서 저장을 중단했어.');
+    }
+    await assertSourceUnchanged(snapshot);
+    // A hard link publishes a fully-written file atomically and NEVER replaces a path.
+    // Do not fall back to rename(): POSIX rename can overwrite an existing original.
+    await fs.promises.link(temporary, destination);
+    published = true;
+  } catch (error) {
+    if (error.code === 'EEXIST') throw fail('OUTPUT_EXISTS', '같은 이름의 파일이 이미 있어. 다른 파일 이름으로 저장해 줘.');
+    if (['ENOTSUP', 'EOPNOTSUPP', 'EPERM', 'EXDEV'].indexOf(error.code) !== -1) {
+      throw fail('ATOMIC_SAVE_UNSUPPORTED', '이 폴더에서는 안전한 새 파일 저장이 지원되지 않아. Mac 내부 디스크의 폴더를 선택해 줘.');
+    }
+    throw error;
+  } finally {
+    if (handle) { try { await handle.close(); } catch (_) { /* Preserve the original failure. */ } }
+    try { await fs.promises.unlink(temporary); } catch (error) {
+      if (error.code !== 'ENOENT' && published) cleanupWarning = true;
+    }
+  }
+  return { path: destination, bytes: bytes.length, sha256: hash(bytes), cleanupWarning: cleanupWarning };
+}
+
+function suggestedName(snapshot, languageCode) {
+  const suffix = String(languageCode || 'translated').replace(/[^a-z0-9_-]/gi, '').slice(0,24) || 'translated';
+  const base = path.basename(snapshot.path, path.extname(snapshot.path));
+  return base + '.' + suffix + '.srt';
+}
+
+module.exports = {
+  MAX_SOURCE_BYTES: MAX_SOURCE_BYTES, decode: decode, encode: encode,
+  readSource: readSource, verifyOutput: verifyOutput,
+  writeTranslatedCopy: writeTranslatedCopy, suggestedName: suggestedName
+};

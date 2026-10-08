@@ -1,0 +1,239 @@
+{
+  "streams": [
+    {
+      "index": 0,
+      "codec_name": "h264",
+      "codec_long_name": "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10",
+      "profile": "Main",
+      "codec_type": "video",
+      "codec_tag_string": "avc1",
+      "codec_tag": "0x31637661",
+      "width": 1080,
+      "height": 1920,
+      "coded_width": 1080,
+      "coded_height": 1920,
+      "closed_captions": 0,
+      "film_grain": 0,
+      "has_b_frames": 2,
+      "pix_fmt": "yuv420p",
+      "level": 41,
+      "color_range": "tv",
+      "color_space": "bt709",
+      "color_transfer": "bt709",
+      "color_primaries": "bt709",
+      "chroma_location": "left",
+      "field_order": "progressive",
+      "refs": 1,
+      "is_avc": "true",
+      "nal_length_size": "4",
+      "id": "0x1",
+      "r_frame_rate": "24000/1001",
+      "avg_frame_rate": "24000/1001",
+      "time_base": "1/24000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 1408407,
+      "duration": "58.683625",
+      "bit_rate": "8593271",
+      "bits_per_raw_sample": "8",
+      "nb_frames": "1407",
+      "extradata_size": 31,
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0,
+        "captions": 0,
+        "descriptions": 0,
+        "metadata": 0,
+        "dependent": 0,
+        "still_image": 0
+      },
+      "tags": {
+        "creation_time": "2026-10-08T22:33:40.000000Z",
+        "language": "eng",
+        "handler_name": "\u001fMainconcept Video Media Handler",
+        "vendor_id": "[0][0][0][0]",
+        "encoder": "AVC Coding"
+      }
+    },
+    {
+      "index": 1,
+      "codec_name": "aac",
+      "codec_long_name": "AAC (Advanced Audio Coding)",
+      "profile": "LC",
+      "codec_type": "audio",
+      "codec_tag_string": "mp4a",
+      "codec_tag": "0x6134706d",
+      "sample_fmt": "fltp",
+      "sample_rate": "48000",
+      "channels": 2,
+      "channel_layout": "stereo",
+      "bits_per_sample": 0,
+      "initial_padding": 0,
+      "id": "0x2",
+      "r_frame_rate": "0/0",
+      "avg_frame_rate": "0/0",
+      "time_base": "1/48000",
+      "start_pts": 0,
+      "start_time": "0.000000",
+      "duration_ts": 2816814,
+      "duration": "58.683625",
+      "bit_rate": "317358",
+      "nb_frames": "2752",
+      "extradata_size": 2,
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0,
+        "captions": 0,
+        "descriptions": 0,
+        "metadata": 0,
+        "dependent": 0,
+        "still_image": 0
+      },
+      "tags": {
+        "creation_time": "2026-10-08T22:33:40.000000Z",
+        "language": "eng",
+        "handler_name": "#Mainconcept MP4 Sound Media Handler",
+        "vendor_id": "[0][0][0][0]"
+      }
+    }
+  ],
+  "audio": [
+    {
+      "timeline_start": 0,
+      "channels": [
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9953923162801458
+        },
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9940299504746656
+        }
+      ]
+    },
+    {
+      "timeline_start": 7.3406666666666665,
+      "channels": [
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9901357412880576
+        },
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.987483911958994
+        }
+      ]
+    },
+    {
+      "timeline_start": 19.227541666666667,
+      "channels": [
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9893452615072009
+        },
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9893170277276456
+        }
+      ]
+    },
+    {
+      "timeline_start": 39.24754166666666,
+      "channels": [
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9661363797209757
+        },
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.96434368931343
+        }
+      ]
+    },
+    {
+      "timeline_start": 43.46008333333333,
+      "channels": [
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9640559595302381
+        },
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9616216962400589
+        }
+      ]
+    },
+    {
+      "timeline_start": 47.33895833333333,
+      "channels": [
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9396797658290901
+        },
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9370494516160753
+        }
+      ]
+    },
+    {
+      "timeline_start": 51.80175,
+      "channels": [
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9384503353695629
+        },
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9278801600617457
+        }
+      ]
+    },
+    {
+      "timeline_start": 53.51179166666667,
+      "channels": [
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9505924741522264
+        },
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9489540389135686
+        }
+      ]
+    },
+    {
+      "timeline_start": 57.682625,
+      "channels": [
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9430584456052419
+        },
+        {
+          "lag_ms": -21.375,
+          "correlation": 0.9447066564818153
+        }
+      ]
+    }
+  ]
+}

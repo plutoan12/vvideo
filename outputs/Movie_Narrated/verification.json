@@ -1,0 +1,44 @@
+{
+  "frames": 1440,
+  "duration": 60.06,
+  "voice": "macOS Yuna synthetic Korean",
+  "peak": 0.8944705128669739,
+  "segments": [
+    {
+      "start": 0.65,
+      "end": 8.113,
+      "voice_correlation": 0.9944301863212267,
+      "voice_over_background_db": 21.051114462143747
+    },
+    {
+      "start": 8.863,
+      "end": 18.689729166666666,
+      "voice_correlation": 0.9908862784220981,
+      "voice_over_background_db": 18.37695389894077
+    },
+    {
+      "start": 19.439729166666666,
+      "end": 25.9503125,
+      "voice_correlation": 0.9876795373121627,
+      "voice_over_background_db": 17.40485004245176
+    },
+    {
+      "start": 26.7003125,
+      "end": 37.65375,
+      "voice_correlation": 0.9884588334635204,
+      "voice_over_background_db": 18.547892711782964
+    },
+    {
+      "start": 38.40375,
+      "end": 47.48979166666667,
+      "voice_correlation": 0.9842472285384063,
+      "voice_over_background_db": 16.753343074178293
+    },
+    {
+      "start": 48.23979166666667,
+      "end": 57.86183333333334,
+      "voice_correlation": 0.9705656396041674,
+      "voice_over_background_db": 15.120242180023736
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+Qwen_Sohee_review_sample.wav
+Qwen3-TTS 1.7B CustomVoice 8bit, 한국어 기본 합성음성 Sohee.
+Apple M3 Max에서 MLX-Audio 0.5.8로 로컬 생성했습니다.
+10.72초 / 24kHz / 모노 PCM WAV. 모델 로딩을 제외한 생성 시간 약 7.54초.
+대본과 말투 지시는 같은 이름의 JSON 파일에 기록했습니다.
+파일 디코딩·유한한 샘플 값 검사를 통과했습니다. 자연스러움은 직접 들어 비교해 주세요.
+Hyunsu_review_sample.mp3와 같은 대본입니다. 기존 60초 영상의 음성은 아직 교체하지 않았습니다.
+재생성: 작업 폴더에서 work/qwen-tts-venv/bin/python work/qwen-narration/generate_sample.py
+모델: https://huggingface.co/mlx-community/Qwen3-TTS-12Hz-1.7B-CustomVoice-8bit
+코드: https://github.com/Blaizzy/mlx-audio

@@ -1,0 +1,11 @@
+{
+  "model": "mlx-community/Qwen3-TTS-12Hz-1.7B-CustomVoice-8bit",
+  "speaker": "Sohee",
+  "synthetic": true,
+  "text": "같은 이야기를 네 명의 감독에게 맡기면, 어떤 영화가 나올까요? 더 킬러스는 그 차이를 보는 재미가 있는 영화입니다.",
+  "instruction": "Speak in natural Korean, as a calm movie reviewer talking to one listener. Warm, conversational, unhurried but not slow. Use subtle curiosity in the first question and relaxed sentence endings. Avoid an announcer tone and exaggerated emotion.",
+  "duration": 10.72,
+  "sample_rate": 24000,
+  "elapsed_seconds": 7.538406416000271,
+  "peak_before_normalization": 0.46007853746414185
+}

@@ -10,18 +10,22 @@ import tempfile
 import threading
 from fractions import Fraction
 from pathlib import Path
-from xml.etree import ElementTree as ET
 
 from shorts_automator import ShortsPackagingPlugin, Progress
-from fcp_xml import add_rate, sub
+from premiere_xml import export_timeline_for_premiere
 from export_delivery import export_mp4
 
 
 def duration(stream):
     if stream.get('duration_ts') is not None and stream.get('time_base'):
         value = Fraction(stream['duration_ts']) * Fraction(stream['time_base'])
-    else:
+    elif stream.get('duration') not in (None, 'N/A'):
         value = Fraction(stream.get('duration', '0'))
+    elif stream.get('tags', {}).get('DURATION'):
+        hours, minutes, seconds = stream['tags']['DURATION'].split(':')
+        value = int(hours) * 3600 + int(minutes) * 60 + Fraction(seconds)
+    else:
+        value = Fraction(0)
     if value <= 0:
         raise ValueError('Media stream must have a known positive duration')
     return value
@@ -114,25 +118,8 @@ class NarrationAssembler(ShortsPackagingPlugin):
                 '-af',f'apad,atrim=duration={seconds}', '-ar','48000','-ac','1','-c:a','pcm_s16le',str(wav)],cancel)
             append(at,wav,frames)
             otio.adapters.write_to_file(timeline,str(folder/'timeline.otio'))
-            xml=ET.fromstring(otio.adapters.write_to_string(timeline,adapter_name='fcp_xml'))
-            seq=xml.find('.//sequence')
-            # Adapter does not populate geometry. Conformed media has one known format.
-            chars=sub(seq.find('./media/video/format'),'samplecharacteristics')
-            add_rate(chars,self.fps)
-            for k,v in [('width',self.width),('height',self.height),('pixelaspectratio','square'),('fielddominance','none')]:sub(chars,k,v)
-            for file in seq.findall('.//file'):
-                if file.find('pathurl') is None:continue
-                fm=file.find('media')
-                if file.findtext('name','').endswith('.wav'):
-                    a=fm.find('audio');ac=sub(a,'samplecharacteristics')
-                    sub(ac,'samplerate',48000);sub(ac,'depth',16);sub(a,'channelcount',1)
-                else:
-                    vc=sub(fm.find('video'),'samplecharacteristics');add_rate(vc,self.fps)
-                    for k,v in [('width',self.width),('height',self.height),('pixelaspectratio','square'),('fielddominance','none')]:sub(vc,k,v)
-            for item in seq.findall('.//clipitem'):
-                for duplicate in item.findall('rate')[1:]:item.remove(duplicate)
-            ET.indent(xml)
-            ET.ElementTree(xml).write(folder/'assembly.xml',encoding='utf-8',xml_declaration=True)
+            export_timeline_for_premiere(timeline, folder/'assembly.xml', self.fps,
+                                         width=self.width, height=self.height)
             if subs is not None:subs.save(str(folder/'captions.srt'),encoding='utf-8')
             (folder/'concat.txt').write_text(''.join(f"file '{p.name}'\n" for p in rendered))
             master=folder/'master.mov'

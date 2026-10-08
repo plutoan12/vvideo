@@ -1,5 +1,7 @@
 # GitHub 기반 자동화 보완
 
+후속 TTS·CLIP 검색·Premiere 검수는 [INTELLIGENCE_KO.md](INTELLIGENCE_KO.md)에 기록했습니다. 아래 검증 기록은 최초 조립 모듈 구현 시점 기준입니다.
+
 기존 컷 분할 모듈에 나레이션 기준 조립, 음성 인식 자막, 대사 검색을 추가했습니다. 외부 프로젝트 소스를 복사한 것이 아니라 아래 패키지의 공개 API를 사용합니다.
 
 ## 채택한 프로젝트
@@ -74,4 +76,4 @@ work/automation-venv/bin/python outputs/ShortsPackagingPlugin/caption_tools.py s
 
 자막 시간은 음성 인식의 추정값입니다. 타임스탬프가 유효하다고 발음별 싱크까지 검증된 것은 아닙니다. 새 OTIO 기반 XML의 실제 Premiere 가져오기는 별도 검수가 필요합니다. 이전 자체 XML 생성기의 Premiere 검수 기록과 구분해야 합니다.
 
-의미 기반 장면 선택, 얼굴 추적 크롭, Typecast/ElevenLabs 보이스 연동, 자연스러움 평가, 통합 UI와 자동 업로드는 아직 구현하지 않았습니다.
+후속 작업에서 CLIP 기반 장면 후보 검색과 OpenAI TTS를 추가했습니다. 얼굴 추적 크롭, Typecast/ElevenLabs 보이스 연동, 자연스러움 평가, 통합 UI와 자동 업로드는 아직 구현하지 않았습니다.

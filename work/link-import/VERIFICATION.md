@@ -16,3 +16,13 @@
 - 4K, HDR, 로그인 영상, 네트워크 장시간 장애, 재생헤드 삽입의 복잡한 멀티트랙 프로젝트: 실제 호스트 미검증.
 
 자동 검사는 실제 호스트 검증을 대체하지 않습니다.
+
+## 2026-10-09 — Link Import 1.1 batch update
+
+- Added newline-separated URL input, maximum 50 distinct normalized URLs, serial downloads and per-link results.
+- Successful downloads are imported together; individual download failures are reported and skipped. Cancellation stops the queue and prevents the import phase while retaining downloaded files.
+- Host batch insertion keeps input order for append, fixed-position ripple insertion, one new sequence, and bin-only modes. Partial host failures stop further insertion and report that completed items remain.
+- `node --test tests/*.test.cjs`: 21 tests passed (8 existing, 13 added). Includes simulated panel callbacks and a simulated Premiere timeline; no live network download in this increment.
+- `node --check LinkImport/main.js`, installer shell syntax, and Git whitespace checks passed.
+- Existing installed code matched the prior repository version. Changed panel files were backed up outside the CEP extensions directory and updated; installed bytes matched repository bytes. Download engines were preserved.
+- Close/reopen the panel, or save projects and restart Premiere if it retains the old version. Actual multiple-URL download and host timeline insertion still require a live user workflow check; mocked host tests are not a substitute for it.

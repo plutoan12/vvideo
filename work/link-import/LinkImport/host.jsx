@@ -7,7 +7,26 @@ var LinkImport = (function () {
  function endSeconds(seq){var max=0,groups=[seq.videoTracks,seq.audioTracks];for(var g=0;g<groups.length;g++){for(var t=0;t<groups[g].numTracks;t++){var clips=groups[g][t].clips;for(var i=0;i<clips.numItems;i++)max=Math.max(max,clips[i].end.seconds);}}return max;}
  return {
   prepare:function(){try{return reply(true,projectKey(),sequenceKey());}catch(e){return reply(false,e.message);}},
-  importVideo:function(encoded,mode,expectedProject,expectedSequence,hasAudio){
+  importVideos:function(paths,audios,mode,expectedProject,expectedSequence){
+   try{
+    if(!paths.length||paths.length!==audios.length||paths.length>50)throw Error('가져올 영상 목록이 올바르지 않습니다.');
+    if(projectKey()!==decodeURIComponent(expectedProject))throw Error('다운로드 중 프로젝트가 바뀌었습니다. 파일은 보관되어 있습니다.');
+    if(mode!=='bin'&&sequenceKey()!==decodeURIComponent(expectedSequence))throw Error('다운로드 중 활성 시퀀스가 바뀌었습니다. 파일은 보관되어 있습니다.');
+    var reverse=mode==='playhead'&&!!app.project.activeSequence;
+    var position=reverse?app.project.activeSequence.getPlayerPosition().seconds:undefined;
+    var done=0;
+    for(var step=0;step<paths.length;step++){
+     // Fixed-position ripple insertion must run backwards to preserve input order.
+     var i=reverse?paths.length-1-step:step;
+     var nextMode=step>0&&(mode==='new'||(mode==='playhead'&&!reverse))?'append':mode;
+     var result=this.importVideo(paths[i],nextMode,expectedProject,encodeURIComponent(sequenceKey()),audios[i],position);
+     if(result.indexOf('OK|')!==0)return reply(false,'타임라인 처리 '+done+'/'+paths.length+'개 후 중단: '+decodeURIComponent(result.split('|')[1])+ ' 이미 가져온 항목은 유지됩니다.');
+     done++;
+    }
+    return reply(true,mode==='bin'?done+'개 영상을 프로젝트의 Link Import 저장소에 가져왔습니다.':done+'개 영상 가져오기 완료 · 입력 순서로 배치했습니다.');
+   }catch(e){return reply(false,e.message);}
+  },
+  importVideo:function(encoded,mode,expectedProject,expectedSequence,hasAudio,position){
    try{
     var key=projectKey();if(key!==decodeURIComponent(expectedProject))throw Error('다운로드 중 프로젝트가 바뀌었습니다. 로컬 영상 가져오기로 다시 선택하세요.');
     if(mode!=='bin'&&sequenceKey()!==decodeURIComponent(expectedSequence))throw Error('다운로드 중 활성 시퀀스가 바뀌었습니다. 로컬 영상 가져오기로 다시 선택하세요.');
@@ -32,6 +51,7 @@ var LinkImport = (function () {
     }
     var beforeV=countItem(seq,item.nodeId,false),beforeA=countItem(seq,item.nodeId,true);
     var time=mode==='playhead'?seq.getPlayerPosition():new Time();if(mode==='append')time.seconds=endSeconds(seq);
+    if(mode==='playhead'&&position!==undefined){if(!isFinite(position)||position<0)throw Error('삽입 위치가 올바르지 않습니다.');time=new Time();time.seconds=position;}
     seq.insertClip(item,time,0,0);
     if(countItem(seq,item.nodeId,false)<=beforeV||(hasAudio&&countItem(seq,item.nodeId,true)<=beforeA))throw Error('파일은 가져왔지만 타임라인 배치를 확인하지 못했습니다. 프로젝트의 Link Import 저장소를 확인하세요.');
     return reply(true,(mode==='append'?'시퀀스 끝':'재생헤드 위치')+'에 영상'+(hasAudio?'·오디오':'')+'를 배치했습니다.',file.fsName);

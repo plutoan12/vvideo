@@ -1,5 +1,5 @@
 #!/bin/bash
-# Link Import 1.0.0 — macOS 사용자 계정용 CEP 설치 프로그램.
+# Link Import 1.1.0 — macOS 사용자 계정용 CEP 설치 프로그램.
 # 실행하면 아래 두 변경을 수행합니다. 실행 전 Premiere Pro를 종료하세요.
 # 1. ~/Library/Application Support/Adobe/CEP/extensions/LinkImport 설치.
 #    기존 폴더는 ~/Library/Application Support/LinkImport/Backups 로 이동.
@@ -11,7 +11,7 @@
 set -euo pipefail
 umask 077
 
-INSTALL_VERSION='1.0.0'
+INSTALL_VERSION='1.1.0'
 CEP_DIR=''
 DEST_DIR=''
 STAGE_DIR=''
